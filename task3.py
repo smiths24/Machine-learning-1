@@ -16,7 +16,7 @@ def evaluate(X, Y, kf):
     sgdReg = SGDRegressor()
     algos = np.array([lin_reg, log_reg, ridgeReg, ensembleReg, sgdReg])
     for i in range(0, algos.size):
-        print("ALGORITHM:",i)
+        print("ALGORITHM:", str(algos[i]))
         abs_error = cross_val_score(algos[i], X, Y, cv = kf, scoring ='neg_mean_absolute_error')
         mean_score = abs_error.mean()
         print("mean absolute error:")
@@ -64,9 +64,3 @@ Y1 = Y1.astype('int')
 kf = KFold(n_splits=10)
 
 evaluate(X1,Y1,kf)
-
-
-
-
-
-
