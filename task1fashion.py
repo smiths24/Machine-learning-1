@@ -1,9 +1,10 @@
 import numpy as np
 import pandas as pd
+from sklearn import metrics, neighbors
 from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import KFold
-from sklearn import neighbors
 
 sizes = [100, 500, 1000, 5000, 10000, 50000, 100000, 500000]
 
@@ -16,7 +17,8 @@ fashion.loc[fashion["Target Class"] == "Medium Number", "Target Class"] = 3
 fashion.loc[fashion["Target Class"] == "Small Number", "Target Class"] = 2
 fashion.loc[fashion["Target Class"] == "Very Small Number", "Target Class"] = 1
 
-# predict y value, x -> independent values
+# predict y value
+# x - independent values
 
 for size_index in range(len(sizes)):
     X = np.array(fashion[:sizes[size_index]])
@@ -28,20 +30,33 @@ for size_index in range(len(sizes)):
     X = X.astype('int')
     Y = Y.astype('int')
 
-    regr = LinearRegression()
     kf = KFold(n_splits=10)
-    abs_error = cross_val_score(regr, X, Y, cv = kf, scoring = 'neg_mean_absolute_error')
-    mean_score = abs_error.mean()
-    print("Mean Absolute Error: ", -1 * mean_score)
-    sq_error= cross_val_score(regr, X, Y, cv=kf, scoring='neg_mean_squared_error')
-    mean_sqerror = -1 * sq_error.mean()
-    print("rmse: ", np.sqrt(mean_sqerror))
 
+    lin_reg = LinearRegression()
+
+    abs_error = cross_val_score(lin_reg, X, Y, cv = kf, scoring ='neg_mean_absolute_error')
+    mean_score = abs_error.mean()
+    print("mean absolute error", sizes[size_index])
+    print(-1 * mean_score)
+
+    sq_error = cross_val_score(lin_reg, X, Y, cv=kf, scoring='neg_mean_squared_error')
+    mean_sqerror = -1 * sq_error.mean()
+    print("mean squared error", sizes[size_index])
+    print(np.sqrt(mean_sqerror))
+
+    # Reset y value for Logistic Regression and Classification
     Y = np.array(fashion[:sizes[size_index]])
     Y = Y[:, -1]
     Y = Y.astype('int')
+
+    log_reg = LogisticRegression()
+    accuracy = cross_val_score(log_reg, X, Y, cv=kf, scoring='accuracy')
+    # accuracy = metrics.accuracy_score(Y, predicted)
+    print("accuracy", sizes[size_index])
+    print(accuracy)
+
     knn = neighbors.KNeighborsClassifier()
     k_nn = cross_val_score(knn, X, Y, cv=kf, scoring='accuracy')
-    print("knn: ", k_nn)
-
+    print("k nearest neighbours", sizes[size_index])
+    print(k_nn)
 
