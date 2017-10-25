@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import KFold
+from sklearn import neighbors
 
 sizes = [100, 500, 1000, 5000, 10000, 50000, 100000, 500000]
 
@@ -23,7 +24,7 @@ for size_index in range(len(sizes)):
     X = X[:,:-1]
 
     Y = np.array(sum_nonoise[:sizes[size_index]])
-    Y = Y[:,-2]
+    Y = Y[:,-1]
 
     X = X.astype('int')
     Y = Y.astype('int')
@@ -36,4 +37,8 @@ for size_index in range(len(sizes)):
     sq_error= cross_val_score(regr, X, Y, cv=kf, scoring='neg_mean_squared_error')
     mean_sqerror = -1 * sq_error.mean()
     print("rmse: ", np.sqrt(mean_sqerror))
+    knn = neighbors.KNeighborsClassifier()
+    k_nn = cross_val_score(knn, X, Y, cv=kf, scoring='accuracy')
+    print("knn: ", k_nn)
+
 
