@@ -30,6 +30,10 @@ for size_index in range(len(sizes)):
 
     regr = LinearRegression()
     kf = KFold(n_splits=10)
-    score = cross_val_score(regr, X, Y, cv = kf, scoring = 'neg_mean_absolute_error')
-    print("Neg Mean Absolute Error: ", -score)
-    #score = cross_val_score(regr, X, Y, cv=kf, scoring='neg_mean_absolute_error')
+    abs_error = cross_val_score(regr, X, Y, cv = kf, scoring = 'neg_mean_absolute_error')
+    mean_score = abs_error.mean()
+    print("Mean Absolute Error: ", -1 * mean_score)
+    sq_error= cross_val_score(regr, X, Y, cv=kf, scoring='neg_mean_squared_error')
+    mean_sqerror = -1 * sq_error.mean()
+    print("rmse: ", np.sqrt(mean_sqerror))
+
