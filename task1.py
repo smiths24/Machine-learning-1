@@ -24,7 +24,7 @@ for size_index in range(len(sizes)):
     X = X[:,:-1]
 
     Y = np.array(sum_nonoise[:sizes[size_index]])
-    Y = Y[:,-1]
+    Y = Y[:,-2]
 
     X = X.astype('int')
     Y = Y.astype('int')
@@ -37,6 +37,10 @@ for size_index in range(len(sizes)):
     sq_error= cross_val_score(regr, X, Y, cv=kf, scoring='neg_mean_squared_error')
     mean_sqerror = -1 * sq_error.mean()
     print("rmse: ", np.sqrt(mean_sqerror))
+
+    Y = np.array(sum_nonoise[:sizes[size_index]])
+    Y = Y[:, -1]
+    Y = Y.astype('int')
     knn = neighbors.KNeighborsClassifier()
     k_nn = cross_val_score(knn, X, Y, cv=kf, scoring='accuracy')
     print("knn: ", k_nn)
