@@ -19,13 +19,11 @@ def evaluate(X, Y, kf):
         print("ALGORITHM:", str(algos[i]))
         abs_error = cross_val_score(algos[i], X, Y, cv = kf, scoring ='neg_mean_absolute_error')
         mean_score = abs_error.mean()
-        print("mean absolute error:")
-        print(-1 * mean_score)
+        print("mean absolute error:", -1 * mean_score)
 
         sq_error = cross_val_score(algos[i], X, Y, cv=kf, scoring='neg_mean_squared_error')
         mean_sqerror = -1 * sq_error.mean()
-        print("mean squared error")
-        print(np.sqrt(mean_sqerror))
+        print("mean squared error: ", np.sqrt(mean_sqerror))
 
         #accuracy = cross_val_score(algos[i], X1, Y1, cv=kf, scoring='accuracy')
         #print("DATASET1 accuracy: ",accuracy)
