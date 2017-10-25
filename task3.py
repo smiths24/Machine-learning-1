@@ -8,6 +8,33 @@ from sklearn.linear_model import SGDRegressor
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import KFold
 
+def evaluate(X, Y, kf):
+    lin_reg = LinearRegression()
+    log_reg = LogisticRegression()
+    ridgeReg = Ridge()
+    ensembleReg = GradientBoostingRegressor()
+    sgdReg = SGDRegressor()
+    algos = np.array([lin_reg, log_reg, ridgeReg, ensembleReg, sgdReg])
+    for i in range(0, algos.size):
+        print("ALGORITHM:",i)
+        abs_error = cross_val_score(algos[i], X, Y, cv = kf, scoring ='neg_mean_absolute_error')
+        mean_score = abs_error.mean()
+        print("DATASET 1 mean absolute error:")
+        print(-1 * mean_score)
+
+        sq_error = cross_val_score(algos[i], X, Y, cv=kf, scoring='neg_mean_squared_error')
+        mean_sqerror = -1 * sq_error.mean()
+        print("DATASET1 mean squared error")
+        print(np.sqrt(mean_sqerror))
+
+        #accuracy = cross_val_score(algos[i], X1, Y1, cv=kf, scoring='accuracy')
+        #print("DATASET1 accuracy: ",accuracy)
+
+        r2 = cross_val_score(algos[i], X, Y, cv=kf, scoring='r2')
+        print("DATASET1 r2: ",r2)
+
+        expl_var = cross_val_score(algos[i], X, Y, cv=kf, scoring='explained_variance')
+        print("DATASET1 explained var: ",expl_var)
 
 #dataset1 = pd.read_csv("kc_house_data.csv").drop(["date"],axis = 1)
 
@@ -36,49 +63,8 @@ Y1 = Y1.astype('int')
 
 kf = KFold(n_splits=10)
 
-lin_reg = LinearRegression()
-log_reg = LogisticRegression()
-ridgeReg = Ridge()
-ensembleReg = GradientBoostingRegressor()
-sgdReg = SGDRegressor()
-algos = np.array([lin_reg, log_reg, ridgeReg, ensembleReg, sgdReg])
+evaluate(X1,Y1,kf)
 
-for i in range(0, algos.size):
-    print("ALGORITHM:",i)
-    abs_error = cross_val_score(algos[i], X1, Y1, cv = kf, scoring ='neg_mean_absolute_error')
-    mean_score = abs_error.mean()
-    print("DATASET 1 mean absolute error:")
-    print(-1 * mean_score)
-
-    #abs_error = cross_val_score(algos[i], X2, Y2, cv = kf, scoring ='neg_mean_absolute_error')
-    #mean_score = abs_error.mean()
-    #print("DATASET2 mean absolute error:")
-    #print(-1 * mean_score)
-
-    sq_error = cross_val_score(algos[i], X1, Y1, cv=kf, scoring='neg_mean_squared_error')
-    mean_sqerror = -1 * sq_error.mean()
-    print("DATASET1 mean squared error")
-    print(np.sqrt(mean_sqerror))
-
-    #sq_error = cross_val_score(algos[i], X2, Y2, cv=kf, scoring='neg_mean_squared_error')
-    #mean_sqerror = -1 * sq_error.mean()
-    #print("DATASET2 mean squared error")
-    #print(np.sqrt(mean_sqerror))
-
-    #accuracy = cross_val_score(algos[i], X1, Y1, cv=kf, scoring='accuracy')
-    #print("DATASET1 accuracy: ",accuracy)
-    #accuracy = cross_val_score(algos[i], X2, Y2, cv=kf, scoring='accuracy')
-    #print("DATASET2 accuracy: ",accuracy)
-
-    r2 = cross_val_score(algos[i], X1, Y1, cv=kf, scoring='r2')
-    print("DATASET1 r2: ",r2)
-    #r2 = cross_val_score(algos[i], X2, Y2, cv=kf, scoring='r2')
-    #print("DATASET2 r2: ",r2)
-
-    expl_var = cross_val_score(algos[i], X1, Y1, cv=kf, scoring='explained_variance')
-    print("DATASET1 explained var: ",expl_var)
-    #expl_var = cross_val_score(algos[i], X1, Y1, cv=kf, scoring='explained_variance')
-    #print("DATASET2 explained var: ",expl_var)
 
 
 
