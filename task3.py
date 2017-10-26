@@ -10,7 +10,7 @@ import time
 import csv
 
 
-def evaluate(X, Y, kf):
+def evaluate(X, Y, kf, dataset):
     linReg = LinearRegression()
     svmReg = svm.SVR()
     decTreeReg = tree.DecisionTreeRegressor()
@@ -18,6 +18,9 @@ def evaluate(X, Y, kf):
     algos = np.array([linReg, svmReg, decTreeReg, sgdReg])
     aString = ["Linear Regression", "SVM Regression", "Decision Tree Regression", "SGD Regression"]
     all_results = []
+    first_row = ["", "mean absolute error", "mean squared error", "median absolute error", "r2", "explained variance",
+                 "runtime"]
+    all_results.append(first_row)
     for i in range(0, algos.size):
         algo_result = []
         algo_result.append(aString[i])
@@ -53,19 +56,16 @@ def evaluate(X, Y, kf):
         print("Time:", t)
         algo_result.append(t)
         all_results.append(algo_result)
+    printResultsToCsv(all_results, dataset)
     return all_results;
 
 
-def printResultsToCsv(all_results):
-    with open("results.csv", 'w') as csvfile:
+def printResultsToCsv(all_results, filename):
+    with open(filename, 'w') as csvfile:
         resultswriter = csv.writer(csvfile, delimiter=",")
         for row in all_results:
             resultswriter.writerow(row)
     return;
-
-all_results = []
-first_row = ["", "mean absolute error", "mean squared error", "median absolute error", "r2", "explained variance", "runtime"]
-all_results.append(first_row)
 
 dataset1 = pd.read_csv("winequality-red.csv", delimiter=";")
 dataset2 = pd.read_csv("winequality-white.csv", delimiter=";")
@@ -87,14 +87,9 @@ Y2 = Y2.astype('int')
 kf = KFold(n_splits=10)
 
 print("EVALUATING DATASET1")
-results1 = evaluate(X1,Y1,kf)
-all_results.append(results1)
-printResultsToCsv(all_results)
+evaluate(X1,Y1,kf, "dataset1 results.csv")
+
 
 print("EVALUATING DATASET2")
-all_results = []
-all_results.append(first_row)
-results2 = evaluate(X2,Y2,kf)
-all_results.append(results2)
+evaluate(X2,Y2,kf, "dataset2 results.csv")
 
-printResultsToCsv(all_results)
