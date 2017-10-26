@@ -9,7 +9,6 @@ from sklearn.model_selection import KFold
 import time
 import csv
 
-
 def evaluate(X, Y, kf, dataset):
     linReg = LinearRegression()
     svmReg = svm.SVR()
@@ -26,6 +25,7 @@ def evaluate(X, Y, kf, dataset):
         algo_result.append(aString[i])
         start = time.clock()
         print("ALGORITHM:", str(algos[i]))
+
         abs_error = cross_val_score(algos[i], X, Y, cv = kf, scoring ='neg_mean_absolute_error')
         mean_score = abs_error.mean()
         mean_score = -1 * mean_score
@@ -59,7 +59,6 @@ def evaluate(X, Y, kf, dataset):
     printResultsToCsv(all_results, dataset)
     return all_results;
 
-
 def printResultsToCsv(all_results, filename):
     with open(filename, 'w') as csvfile:
         resultswriter = csv.writer(csvfile, delimiter=",")
@@ -84,11 +83,10 @@ Y2 = Y2[:,-1]
 X2 = X2.astype('int')
 Y2 = Y2.astype('int')
 
-kf = KFold(n_splits=10)
+kf = KFold(n_splits=10, random_state=0)
 
 print("EVALUATING DATASET1")
 evaluate(X1,Y1,kf, "dataset1 results.csv")
-
 
 print("EVALUATING DATASET2")
 evaluate(X2,Y2,kf, "dataset2 results.csv")
