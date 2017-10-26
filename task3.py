@@ -25,8 +25,9 @@ def evaluate(X, Y, kf):
         mean_sqerror = -1 * sq_error.mean()
         print("mean squared error: ", np.sqrt(mean_sqerror))
 
-        #accuracy = cross_val_score(algos[i], X1, Y1, cv=kf, scoring='accuracy')
-        #print("DATASET1 accuracy: ",accuracy)
+        log_err = cross_val_score(algos[i], X, Y, cv=kf, scoring='neg_mean_squared_log_error')
+        log_err = -1 * log_err.mean()
+        print("mean squared log error: ", log_err)
 
         r2 = cross_val_score(algos[i], X, Y, cv=kf, scoring='r2')
         print("r2: ",r2)
@@ -62,3 +63,9 @@ Y1 = Y1.astype('int')
 kf = KFold(n_splits=10)
 
 evaluate(X1,Y1,kf)
+
+
+
+
+
+
