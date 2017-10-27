@@ -67,7 +67,7 @@ for size_index in range(len(sizes)):
     mean_ridge_sq_error = -1 * ridge_sq_error_norm.mean()                                     # Multiply by -1 and find mean
     print(sizes[size_index], "ridge mean squared error: ", np.sqrt(mean_ridge_sq_error))
 
-    if sizes[size_index] < 5000:
+    if sizes[size_index] < 10000:
         # Logistic Regression
         log_reg = LogisticRegression()
         # - Accuracy
@@ -87,8 +87,9 @@ for size_index in range(len(sizes)):
     mean_knn = k_nn.mean()
     print(sizes[size_index], "knn accuracy: ", mean_knn)
     # - Average Precision
+    score = make_scorer(precision_score, average="weighted")
     knn_avg_precision = cross_val_score(knn, X, Y, cv=kf, scoring=score)
-    mean_knn_avg_precision = avg_precision.mean()
+    mean_knn_avg_precision = knn_avg_precision.mean()
     print(sizes[size_index], "knn average precision: ", mean_knn_avg_precision)
 
     print("\n")
