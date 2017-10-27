@@ -146,7 +146,7 @@ for size_index in range(len(sizes)):
     X_no_noise = X_no_noise.astype('int')
     Y_no_noise = Y_no_noise.astype('int')
     print("SUM no noise")
-    evaluate(X_no_noise,Y_no_noise,kf,"no_noise", sum_no_noise)
+    evaluate(X_no_noise,Y_no_noise,kf,"The SUM dataset, without noise.csv", sum_no_noise)
 
     X_housing = np.array(kc_house[:sizes[size_index]])
     X_housing = X_housing[:, 2:6]
