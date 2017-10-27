@@ -7,7 +7,7 @@ from sklearn.metrics import make_scorer, precision_score
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import KFold
 
-sizes = [100, 500, 1000, 5000, 10000, 50000, 100000, 500000]
+sizes = [100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000]
 
 filename = "The SUM Dataset With Noise.csv"
 sum_with_noise = pd.read_csv(filename, delimiter=";").drop(["Instance"], axis = 1)
@@ -94,8 +94,9 @@ for size_index in range(len(sizes)):
     mean_knn = k_nn.mean()
     print(sizes[size_index], "knn accuracy: ", mean_knn)
     # - Average Precision
+    score = make_scorer(precision_score, average="weighted")
     knn_avg_precision = cross_val_score(knn, X, Y, cv=kf, scoring=score)
-    mean_knn_avg_precision = avg_precision.mean()
+    mean_knn_avg_precision = knn_avg_precision.mean()
     print(sizes[size_index], "knn average precision: ", mean_knn_avg_precision)
 
     print("\n")
